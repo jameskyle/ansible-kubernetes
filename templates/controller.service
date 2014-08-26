@@ -1,0 +1,16 @@
+[Unit]
+Description=Kubernetes Controller Manager
+After=network.target
+Requires=etcd.service
+
+[Service]
+ExecStart=/usr/local/bin/controller-manager \
+                         --master={{ mgmt_addr }}:8080
+
+Restart=on-failure
+LimitNOFILE=1048576
+LimitNPROC=1048576
+
+[Install]
+WantedBy=multi-user.target
+

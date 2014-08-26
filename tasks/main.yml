@@ -1,0 +1,126 @@
+---
+# file: roles/kubernetes/tasks/main.yml
+- name: install etcd
+  copy: src={{ ansible_userspace_architecture }}/etcd 
+        dest=/usr/local/bin/etcd 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  tags:
+      - kubernetes
+- name: create etcd data directory
+  file: path=/var/lib/etcd group=root owner=root mode=755 state=directory
+  sudo: yes
+  tags:
+      - kubernetes
+- name: install apiserver
+  copy: src={{ ansible_userspace_architecture }}/apiserver 
+        dest=/usr/local/bin 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  when: ansible_hostname == "{{ primary_docker_host }}"
+  notify: restart apiserver
+  tags:
+      - kubernetes
+- name: install controller-manager
+  copy: src={{ ansible_userspace_architecture }}/controller-manager 
+        dest=/usr/local/bin 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  when: ansible_hostname == "{{ primary_docker_host }}"
+  notify: restart controller
+  tags:
+      - kubernetes
+- name: install kube-proxy
+  copy: src={{ ansible_userspace_architecture }}/proxy
+        dest=/usr/local/bin 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  notify: restart kube-proxy
+  tags:
+      - kubernetes
+
+- name: install kubecfg
+  copy: src={{ ansible_userspace_architecture }}/kubecfg
+        dest=/usr/local/bin 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  tags:
+      - kubernetes
+
+- name: install kubelet
+  copy: src={{ ansible_userspace_architecture }}/kubelet
+        dest=/usr/local/bin 
+        owner=root 
+        group=root 
+        mode=0755
+  sudo: yes
+  notify: restart kubelet
+  tags:
+      - kubernetes
+
+- name: etcd.service
+  template: src=etcd.service 
+            dest=/etc/systemd/system/etcd.service 
+            owner=root 
+            group=root 
+            mode=0644
+  when: ansible_hostname == "{{ primary_docker_host }}"
+  sudo: yes
+  notify: restart etcd
+  tags:
+      - kubernetes
+
+- name: apiserver.service
+  template: src=apiserver.service 
+            dest=/etc/systemd/system/apiserver.service 
+            owner=root 
+            group=root 
+            mode=0644
+  when: ansible_hostname == "{{ primary_docker_host }}"
+  sudo: yes
+  notify: restart apiserver
+  tags:
+      - kubernetes
+- name: controller.service
+  template: src=controller.service 
+            dest=/etc/systemd/system/controller.service 
+            owner=root 
+            group=root 
+            mode=0644
+  when: ansible_hostname == "{{ primary_docker_host }}"
+  sudo: yes
+  notify: restart apiserver
+  tags:
+      - kubernetes
+- name: kube-proxy.service
+  template: src=kube-proxy.service 
+            dest=/etc/systemd/system/kube-proxy.service 
+            owner=root 
+            group=root 
+            mode=0644
+  #when: ansible_hostname == "{{ primary_docker_host }}"
+  sudo: yes
+  notify: restart kube-proxy
+  tags:
+      - kubernetes
+- name: kubelet.service
+  template: src=kubelet.service 
+            dest=/etc/systemd/system/kubelet.service 
+            owner=root 
+            group=root 
+            mode=0644
+  sudo: yes
+  notify: restart kubelet
+  tags:
+      - kubernetes
+

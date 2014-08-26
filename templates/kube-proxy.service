@@ -1,0 +1,13 @@
+[Unit]
+Description=Kubernetes Proxy Server
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/proxy --etcd_servers=http://{{ primary_docker_host }}.{{ domain }}:4001
+
+Restart=on-failure
+LimitNOFILE=1048576
+LimitNPROC=1048576
+
+[Install]
+WantedBy=multi-user.target

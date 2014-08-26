@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: James A. Kyle
+  description: Deploy kubernetes to RHEL systems
+  company: AT&T Foundry
+  license: BSD
+  min_ansible_version: 1.8
+  platforms:
+  - name: EL
+    versions:
+    - 7
+  - name: Fedora
+    versions:
+    - 18
+    - 19
+    - 20
+  categories:
+  - cloud
+dependencies: []
+  

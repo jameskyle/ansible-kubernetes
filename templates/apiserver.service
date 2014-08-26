@@ -1,0 +1,21 @@
+[Unit]
+Description=Kubernetes API Server
+After=network.target
+Requires=etcd.service
+
+[Service]
+ExecStart=/usr/local/bin/apiserver --address={{ mgmt_addr }} \
+                                   --port=8080 \
+                                   --etcd_servers=http://{{ mgmt_addr }}:4001 \
+                                   --machines={% for host in groups[primary_group] -%}
+                                   {{ host -}}
+                                   {% if not loop.last -%},{% endif -%}
+                                  {% endfor %}
+
+
+Restart=on-failure
+LimitNOFILE=1048576
+LimitNPROC=1048576
+
+[Install]
+WantedBy=multi-user.target

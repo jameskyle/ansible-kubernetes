@@ -1,0 +1,18 @@
+---
+# file: roles/kubernetes/handlers/main.yml
+- name: restart etcd
+  service: name=etcd.service state=restarted enabled=yes
+  sudo: yes
+- name: restart apiserver
+  service: name=apiserver.service state=restarted enabled=yes
+  sudo: yes
+- name: restart controller
+  service: name=controller.service state=restarted enabled=yes
+  sudo: yes
+- name: restart kube-proxy
+  service: name=kube-proxy.service state=restarted enabled=yes
+  sudo: yes
+- name: restart kubelet
+  service: name=kubelet.service state=restarted enabled=yes
+  sudo: yes
+
