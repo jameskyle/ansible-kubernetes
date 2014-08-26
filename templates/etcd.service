@@ -1,0 +1,12 @@
+[Unit]
+Description=Etcd Server
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+ExecStart=/usr/local/bin/etcd --name {{ ansible_hostname }} --data-dir=/var/lib/etcd
+
+[Install]
+WantedBy=multi-user.target

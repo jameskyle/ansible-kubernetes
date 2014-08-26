@@ -1,0 +1,6 @@
+---
+# defaults file for ansible-kubernetes
+primary_docker_host: dock1
+mgmt_addr: ansible_default_ipv4.address
+primary_group: dockers
+domain: localdomain
